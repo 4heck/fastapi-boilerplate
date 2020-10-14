@@ -1,6 +1,20 @@
-class UserUseCase:
-    def __init__(self, user_repository_class):
-        self.user_repository = user_repository_class()
+from apps.users.entities.user import UserEntity
+from apps.users.models.user import User
 
-    def get_user(self, id: int):
-        return self.user_repository.get_user(id)
+
+class UserRepository:
+    async def get(self, user_id: int) -> UserEntity:
+        user = await User.get(user_id)
+        if user:
+            return UserEntity.from_orm(user)
+
+    async def create(self, user_entity: UserEntity) -> UserEntity:
+        user = await User.create(**user_entity.dict(exclude={"id"}))
+        if user:
+            return UserEntity.from_orm(user)
+
+    async def delete(self, user_id: int) -> None:
+        user = await User.get(user_id)
+        if user:
+            await user.delete()
+            return UserEntity.from_orm(user)

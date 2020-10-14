@@ -1,12 +1,13 @@
-import datetime
+from datetime import datetime
+from typing import Optional
 
-import pydantic
+from pydantic import BaseModel
 
 
-class BaseEntity(pydantic.BaseModel):
-    id: int
-    created_on: datetime.datetime
-    updated_on: datetime.datetime
+class BaseEntity(BaseModel):
+    id: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     class Config:
         orm_mode = True

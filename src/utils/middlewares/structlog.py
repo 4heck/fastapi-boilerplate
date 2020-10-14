@@ -3,7 +3,6 @@ import uuid
 
 from core import settings
 from starlette.middleware.base import BaseHTTPMiddleware
-
 from structlog import get_logger
 
 logger = get_logger(__name__)
@@ -18,9 +17,7 @@ def get_vars(request):
         "correlation_id": get_request_header(
             request, "x-correlation-id", "HTTP_X_CORRELATION_ID"
         ),
-        "request_id": get_request_header(
-            request, "x-request-id", "HTTP_X_REQUEST_ID"
-        )
+        "request_id": get_request_header(request, "x-request-id", "HTTP_X_REQUEST_ID")
         or str(uuid.uuid4()),
         "remote_addr": request.client.host,
         "path": request.url.path,
@@ -50,9 +47,7 @@ class RequestFinishMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
 
         time_started = getattr(request.state, "time_started", None)
-        duration = (
-            round(time.time() - time_started, 4) if time_started else None
-        )
+        duration = round(time.time() - time_started, 4) if time_started else None
         logger.info(
             "request_finished",
             status=response.status_code,

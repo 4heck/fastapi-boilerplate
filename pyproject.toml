@@ -15,6 +15,8 @@ sentry_sdk = "^0.19.0"
 structlog_sentry = "^1.2.2"
 structlog = "^20.1.0"
 colorama = "^0.4.4"
+pydantic_sqlalchemy = "^0.0.7"
+pytz = "^2020.1"
 
 [tool.poetry.dev-dependencies]
 pep8-naming = "^0.11.1"
