@@ -11,3 +11,4 @@ def init_models(app=None):
             __import__(f"{local_app}.models")
         except Exception as exc:
             logger.error("load_models", exc=str(exc))
+    return app
