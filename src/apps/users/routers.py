@@ -1,9 +1,18 @@
+from typing import List
+
 from apps.users.entities.user import UserEntity
 from apps.users.views.user import UserView
 from fastapi import APIRouter
 
 router = APIRouter()
 user_view = UserView()
+
+router.get(
+    "/",
+    name="list",
+    summary="List users",
+    response_model=List[UserEntity],
+)(user_view.list)
 
 router.get(
     "/{user_id}",

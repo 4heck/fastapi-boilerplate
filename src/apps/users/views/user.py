@@ -1,11 +1,16 @@
 from apps.users.entities.user import UserEntity
 from apps.users.services.user import UserService
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 
 
 class UserView:
     def __init__(self):
         self.user_service = UserService()
+
+    async def list(self, response: Response):
+        user_entities = await self.user_service.list()
+        response.headers["X-Total-Count"] = str(len(user_entities))
+        return user_entities
 
     async def get(self, user_id: int):
         user_entity = await self.user_service.get(user_id)
