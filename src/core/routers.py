@@ -7,3 +7,4 @@ def init_routers(app):
         prefix="/users",
         tags=["users"],
     )
+    return app
