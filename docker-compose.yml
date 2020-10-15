@@ -1,0 +1,39 @@
+version: '3.7'
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres:
+
+services:
+  app:
+    build: ./
+    volumes:
+      - ./:/app
+    networks:
+      - backend
+    depends_on:
+      - postgres
+    command: /env/bin/uvicorn asgi:app --host 0.0.0.0 --port 9000 --workers 2 --reload
+    ports:
+      - 9000:9000
+    env_file: .env
+    environment:
+      - PYTHONPATH=/app/src/
+
+  postgres:
+    image: 'postgres:11.8'
+    volumes:
+      - postgres:/var/lib/postgresql/data:cached
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata/
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db
